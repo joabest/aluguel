@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Painel Administrativo | Aluguel de Carros</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">A</div>
+        <div><strong>Auto Rental</strong><span>Admin</span></div>
+      </div>
+      <nav class="nav">
+        <button class="nav-link active" data-view="dashboard">Dashboard</button>
+        <button class="nav-link" data-view="reservations">Reservas</button>
+        <button class="nav-link" data-view="vehicles">Veículos</button>
+        <button class="nav-link" data-view="users">Usuários</button>
+        <button class="nav-link" data-view="payments">Pagamentos</button>
+        <button class="nav-link" data-view="settings">Configurações</button>
+      </nav>
+      <div class="sidebar-note">
+        <strong>Sem login por enquanto</strong>
+        <span>Autenticação será conectada depois.</span>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <button class="menu-btn" id="menuBtn" aria-label="Abrir menu">☰</button>
+          <h1 id="pageTitle">Dashboard</h1>
+          <p id="pageSubtitle">Visão geral da locadora</p>
+        </div>
+        <div class="topbar-actions">
+          <span class="storage-pill" id="storageMode">Armazenamento local</span>
+          <button class="btn btn-primary" id="quickReservation">+ Nova reserva</button>
+        </div>
+      </header>
+
+      <section class="view active" id="view-dashboard">
+        <div class="stats-grid">
+          <article class="stat-card"><span>Reservas ativas</span><strong id="statActiveReservations">0</strong><small id="statReservationsHint">0 confirmadas</small></article>
+          <article class="stat-card"><span>Veículos disponíveis</span><strong id="statAvailableCars">0</strong><small id="statCarsHint">0 cadastrados</small></article>
+          <article class="stat-card"><span>Receita recebida</span><strong id="statRevenue">R$ 0,00</strong><small id="statRevenueHint">Pagamentos concluídos</small></article>
+          <article class="stat-card"><span>Clientes ativos</span><strong id="statUsers">0</strong><small id="statUsersHint">Cadastros válidos</small></article>
+        </div>
+        <div class="grid-2">
+          <article class="panel">
+            <div class="panel-head"><div><h2>Próximas reservas</h2><p>Reservas mais próximas da retirada</p></div><button class="btn btn-ghost" data-view-target="reservations">Ver todas</button></div>
+            <div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Veículo</th><th>Retirada</th><th>Status</th></tr></thead><tbody id="dashboardReservations"></tbody></table></div>
+          </article>
+          <article class="panel">
+            <div class="panel-head"><div><h2>Frota</h2><p>Status dos veículos</p></div><button class="btn btn-ghost" data-view-target="vehicles">Gerenciar</button></div>
+            <div class="fleet-summary" id="fleetSummary"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="view-reservations">
+        <div class="panel">
+          <div class="panel-head stack-mobile">
+            <div><h2>Reservas</h2><p>Crie, edite e acompanhe todas as locações</p></div>
+            <div class="toolbar"><input class="input" id="reservationSearch" placeholder="Buscar cliente ou veículo" /><select class="input" id="reservationStatusFilter"><option value="all">Todos os status</option><option value="pending">Pendente</option><option value="confirmed">Confirmada</option><option value="active">Em andamento</option><option value="completed">Concluída</option><option value="cancelled">Cancelada</option></select><button class="btn btn-primary" id="newReservationBtn">+ Nova reserva</button></div>
+          </div>
+          <div class="table-wrap"><table><thead><tr><th>#</th><th>Cliente</th><th>Veículo</th><th>Período</th><th>Total</th><th>Status</th><th></th></tr></thead><tbody id="reservationsTable"></tbody></table></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-vehicles">
+        <div class="panel">
+          <div class="panel-head stack-mobile"><div><h2>Veículos</h2><p>Controle de frota e valor da diária</p></div><div class="toolbar"><input class="input" id="vehicleSearch" placeholder="Buscar modelo ou placa" /><button class="btn btn-primary" id="newVehicleBtn">+ Novo veículo</button></div></div>
+          <div class="table-wrap"><table><thead><tr><th>Veículo</th><th>Categoria</th><th>Placa</th><th>Diária</th><th>Status</th><th></th></tr></thead><tbody id="vehiclesTable"></tbody></table></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-users">
+        <div class="panel">
+          <div class="panel-head stack-mobile"><div><h2>Usuários</h2><p>Clientes cadastrados na locadora</p></div><div class="toolbar"><input class="input" id="userSearch" placeholder="Buscar nome, e-mail ou telefone" /><button class="btn btn-primary" id="newUserBtn">+ Novo usuário</button></div></div>
+          <div class="table-wrap"><table><thead><tr><th>Nome</th><th>E-mail</th><th>Telefone</th><th>Status</th><th>Reservas</th><th></th></tr></thead><tbody id="usersTable"></tbody></table></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-payments">
+        <div class="panel">
+          <div class="panel-head stack-mobile"><div><h2>Pagamentos</h2><p>Acompanhe valores recebidos e pendentes</p></div><div class="toolbar"><select class="input" id="paymentStatusFilter"><option value="all">Todos os status</option><option value="pending">Pendente</option><option value="paid">Pago</option><option value="refunded">Estornado</option><option value="failed">Falhou</option></select><button class="btn btn-primary" id="newPaymentBtn">+ Novo pagamento</button></div></div>
+          <div class="table-wrap"><table><thead><tr><th>Reserva</th><th>Cliente</th><th>Valor</th><th>Método</th><th>Status</th><th>Data</th><th></th></tr></thead><tbody id="paymentsTable"></tbody></table></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-settings">
+        <div class="grid-2">
+          <article class="panel"><h2>Dados</h2><p>Exporte ou importe o estado atual do painel.</p><div class="settings-actions"><button class="btn btn-secondary" id="exportDataBtn">Exportar JSON</button><label class="btn btn-secondary file-btn">Importar JSON<input type="file" id="importDataInput" accept="application/json" hidden /></label><button class="btn btn-danger" id="resetDataBtn">Restaurar dados de exemplo</button></div></article>
+          <article class="panel"><h2>Backend</h2><p>O painel está pronto para Supabase. Sem configuração, usa armazenamento local do navegador para permanecer funcional.</p><div class="backend-card"><span class="dot"></span><div><strong id="backendStatusTitle">Modo local ativo</strong><small id="backendStatusText">Nenhuma credencial de backend foi configurada.</small></div></div></article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-card"><div class="modal-head"><div><h2 id="modalTitle">Novo</h2><p id="modalSubtitle"></p></div><button class="icon-btn" data-close-modal>×</button></div><form id="modalForm"><div id="modalFields" class="form-grid"></div><div class="modal-actions"><button type="button" class="btn btn-secondary" data-close-modal>Cancelar</button><button type="submit" class="btn btn-primary">Salvar</button></div></form></div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
