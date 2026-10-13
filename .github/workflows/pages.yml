@@ -1,4 +1,4 @@
-name: Deploy static site to GitHub Pages
+name: Sync AutoDeal and deploy to GitHub Pages
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -23,14 +23,48 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Mirror AutoDeal source
+        run: |
+          rm -rf /tmp/autodeal-mirror
+          mkdir -p /tmp/autodeal-mirror
+          wget \
+            --mirror \
+            --convert-links \
+            --adjust-extension \
+            --page-requisites \
+            --no-parent \
+            --domains tfautodeal.vercel.app \
+            --directory-prefix=/tmp/autodeal-mirror \
+            https://tfautodeal.vercel.app/
+          test -f /tmp/autodeal-mirror/tfautodeal.vercel.app/index.html
+
+      - name: Replace repository site with mirrored source
+        run: |
+          rsync -a --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            /tmp/autodeal-mirror/tfautodeal.vercel.app/ ./
+          touch .nojekyll
+
+      - name: Commit mirrored source back to test
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "Sync AutoDeal source [skip ci]"
+            git push origin HEAD:test
+          fi
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: .
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
