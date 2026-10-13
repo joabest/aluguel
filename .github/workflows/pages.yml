@@ -25,9 +25,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Mirror AutoDeal source
+        shell: bash
         run: |
           rm -rf /tmp/autodeal-mirror
           mkdir -p /tmp/autodeal-mirror
+          set +e
           wget \
             --mirror \
             --convert-links \
@@ -37,6 +39,9 @@ jobs:
             --domains tfautodeal.vercel.app \
             --directory-prefix=/tmp/autodeal-mirror \
             https://tfautodeal.vercel.app/
+          WGET_STATUS=$?
+          set -e
+          echo "wget exit status: ${WGET_STATUS}"
           test -f /tmp/autodeal-mirror/tfautodeal.vercel.app/index.html
 
       - name: Replace repository site with mirrored source
