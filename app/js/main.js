@@ -81,10 +81,10 @@
                         success: function (msg) {
                             var result, cls;
                             if (msg === 'Success') {
-                                result = 'Message Sent Successfully To Email Administrator. ( You can change the email management a very easy way to get the message of customers in the user manual )';
+                                result = 'Mensagem enviada com sucesso.';
                                 cls = 'msg-success';
                             } else {
-                                result = 'Error sending email.';
+                                result = 'Erro ao enviar a mensagem.';
                                 cls = 'msg-error';
                             }
 
@@ -246,8 +246,8 @@
             subscribeMsg: $('#subscribe-msg'),
             subscribeContent: $("#subscribe-content"),
             dataMailchimp: $('#subscribe-form').attr('data-mailchimp'),
-            success_message: '<div class="notification_ok">Thank you for joining our mailing list! Please check your email for a confirmation link.</div>',
-            failure_message: '<div class="notification_error">Error! <strong>There was a problem processing your submission.</strong></div>',
+            success_message: '<div class="notification_ok">Obrigado por se inscrever. Confira seu e-mail para confirmar.</div>',
+            failure_message: '<div class="notification_error">Erro! <strong>Não foi possível processar sua inscrição.</strong></div>',
             noticeError: '<div class="notification_error">{msg}</div>',
             noticeInfo: '<div class="notification_error">{msg}</div>',
             basicAction: 'mail/subscribe.php',
@@ -288,19 +288,19 @@
                     } else {
                         switch (responseData.msg) {
                             case "email-required":
-                                messageDiv.html(objUse.noticeError.replace('{msg}', 'Error! <strong>Email is required.</strong>'));
+                                messageDiv.html(objUse.noticeError.replace('{msg}', 'Erro! <strong>O e-mail é obrigatório.</strong>'));
                                 break;
                             case "email-err":
-                                messageDiv.html(objUse.noticeError.replace('{msg}', 'Error! <strong>Email invalid.</strong>'));
+                                messageDiv.html(objUse.noticeError.replace('{msg}', 'Erro! <strong>E-mail inválido.</strong>'));
                                 break;
                             case "duplicate":
-                                messageDiv.html(objUse.noticeError.replace('{msg}', 'Error! <strong>Email is duplicate.</strong>'));
+                                messageDiv.html(objUse.noticeError.replace('{msg}', 'Erro! <strong>Este e-mail já está cadastrado.</strong>'));
                                 break;
                             case "filewrite":
-                                messageDiv.html(objUse.noticeInfo.replace('{msg}', 'Error! <strong>Mail list file is open.</strong>'));
+                                messageDiv.html(objUse.noticeInfo.replace('{msg}', 'Erro! <strong>Não foi possível salvar sua inscrição.</strong>'));
                                 break;
                             case "undefined":
-                                messageDiv.html(objUse.noticeInfo.replace('{msg}', 'Error! <strong>undefined error.</strong>'));
+                                messageDiv.html(objUse.noticeInfo.replace('{msg}', 'Erro! <strong>Ocorreu um erro inesperado.</strong>'));
                                 break;
                             case "api-error":
                                 objUse.subscribeContent.fadeOut(500, function () {
@@ -311,7 +311,7 @@
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    alert('Connection error');
+                    alert('Erro de conexão');
                 },
                 complete: function (data) {
                     window.ajaxCalling = false;
@@ -344,3 +344,9 @@
 
 })(jQuery);
 
+(function () {
+    var script = document.createElement('script');
+    script.src = 'app/js/pt-br.js';
+    script.defer = true;
+    document.head.appendChild(script);
+})();
